@@ -1,12 +1,15 @@
-// Fix the code so that it compiles.
+// Complete the code by addressing the TODO.
+
+struct User {
+    name: String,
+    age: u8
+}
 
 fn main() {
-    let mut str1 = String::from("Rust");
-    let ref1 = &mut str1;
-
-    // str1.push('🦀'); // teo
-    ref1.push('🦀');
-
-    println!("ref1 = {}", ref1);
-    println!("str1 = {}", str1);
+    let user = User {
+        name: String::from("Tom Riddle"),
+        age: 17u8,
+    };
+    println!("User's name: {}", user.name);
+    println!("User's age: {}", user.age);
 }
