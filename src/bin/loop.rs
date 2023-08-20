@@ -5,7 +5,8 @@ fn main() {
 
     println!("x = {}", x);
 
-    'outer: loop { // loop can be labeled
+    'outer: loop {
+        // loop can be labeled
         println!("Entered the outer loop");
 
         'inner: loop {

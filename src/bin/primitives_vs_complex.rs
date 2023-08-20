@@ -7,7 +7,6 @@ type ARRAY_W_STRING = [String; 3];
 type ARRAY_TUPLE_INTEGERS = [TUPLE_INTEGERS; 3];
 type ARRAY_TUPLE_W_STRING = [TUPLE_W_STRING; 3];
 
-
 const x: i32 = 5;
 
 fn main() {
@@ -35,7 +34,6 @@ fn main() {
     print_ARRAY_W_STRING(as_);
     // print_ARRAY_W_STRING(as_); // Array of complex types is complex, so it is moved
 
-
     let ati: ARRAY_TUPLE_INTEGERS = [(1, 2), (3, 4), (5, 6)];
     print_ARRAY_TUPLE_INTEGERS(ati);
     print_ARRAY_TUPLE_INTEGERS(ati); // Array of tuples of primitives is primitive
@@ -50,16 +48,13 @@ fn main() {
     // print_ARRAY_TUPLE_W_STRING(ats); // Array of tuples of complex types is complex, so it is moved
 }
 
-
 fn print_TUPLE_INTEGERS(t: TUPLE_INTEGERS) {
     println!("{} {}", t.0, t.1);
 }
 
-
 fn print_TUPLE_W_STRING(t: TUPLE_W_STRING) {
     println!("{} {}", t.0, t.1);
 }
-
 
 fn print_ARRAY_INTEGERS(a: ARRAY_INTEGERS) {
     println!("{} {} {}", a[0], a[1], a[2]);

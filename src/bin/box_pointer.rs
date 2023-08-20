@@ -1,5 +1,4 @@
 fn main() {
-
     let mut b = Box::new(10);
     let b2 = &mut b;
 

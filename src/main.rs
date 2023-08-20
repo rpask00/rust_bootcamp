@@ -1,3 +1,5 @@
+use draw::draw_line;
+
 fn main() {
-    println!("Hello, world!");
+    draw_line()
 }

@@ -7,7 +7,6 @@ fn main() {
     mut_move(s1);
     // mut_move(s1); // this won't work, because s1 is moved
 
-
     let mut x = 4;
     let mut y = &mut x;
 }
