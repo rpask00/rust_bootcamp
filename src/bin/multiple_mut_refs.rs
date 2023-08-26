@@ -6,7 +6,7 @@ fn main() {
     ref1.push('🦀');
 
     println!("str1 = {}", str1); // jeśli ref1 nie jest już używane w przyszłości to można użyć str1
-                                 // println!("ref1 = {}", ref1); // po odkomentowaniu tego linia wyżej przestanie działać
+    // println!("ref1 = {}", ref1); // po odkomentowaniu tego linia wyżej przestanie działać
 }
 
 // wszystko tutaj zależy od lifetime'ów

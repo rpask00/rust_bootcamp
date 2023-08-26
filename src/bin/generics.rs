@@ -43,8 +43,8 @@ fn main() {
     };
 
     let b3 = BrowserCommand::new(
-         String::from("scrool"),
-            34
+        String::from("scrool"),
+        34,
     );
 
     b1.print(); // this works on both types
@@ -55,5 +55,4 @@ fn main() {
 
     // let d = b1.double(); //this doesn't work on Strings
     let d = b2.double(); // double is defined specifically for i32
-
 }

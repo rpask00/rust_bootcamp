@@ -31,7 +31,8 @@ trait Loadable {
     fn load(&mut self, amount: u32);
 }
 
-trait Vehicle: Paintable {  // Supertrait
+trait Vehicle: Paintable {
+    // Supertrait
     fn drive(&mut self);
 }
 
@@ -41,7 +42,8 @@ impl Paintable for Car {
     }
 }
 
-impl Vehicle for Car {   // to działa bo Paintable zostało zaimplementowane dla Car, gdyby nie było tego bloku wyżej to by rzuciło błąd
+impl Vehicle for Car {
+    // to działa bo Paintable zostało zaimplementowane dla Car, gdyby nie było tego bloku wyżej to by rzuciło błąd
     fn drive(&mut self) {
         println!("Driving car");
     }

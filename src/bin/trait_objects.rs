@@ -21,12 +21,27 @@ impl Paintable for Car {
 
 fn main() {
     let mut green_object = get_green_object(true);
+    green_object = get_green_object(false);
+
+    paint_purple(&mut green_object);
 
     let green_object_ref1 = &mut green_object; // to zwróci mutowalną referencię do Boxa
     green_object_ref1.paint("purple".to_string());
 
     let green_object_ref2 = green_object.as_mut();  // to zwróci mutowalną referencję do obiektu, którego właścicielem jest ciągle Box
     green_object_ref2.paint("purple".to_string());
+
+    let mut smth_paintable = create_paintable_house();
+    smth_paintable.paint("red".to_string());
+
+    let house = House {};
+    let car = Car {};
+
+    // let colection = vec![car, house]; // nie zadziała bo są różne typy
+    // let collection: Vec<Box<dyn Paintable>> = vec![Box::new(car), Box::new(house)]; // zadziała bo są typy implementujące Paintable
+    let collecition: Vec<&dyn Paintable> = vec![&car, &house];
+
+    let h = ref_to_paintable(&mut green_object);
 }
 
 
@@ -47,6 +62,26 @@ fn paint_yellow1(mut item: House) -> House {
 fn paint_yellow2(mut item: Car) -> Car {
     item.paint("yellow".to_string());
     return item;
+}
+
+fn paint_purple(item: &mut Box<dyn Paintable>) {
+    item.paint("purple".to_string());
+}
+
+fn ref_to_paintable() -> &'static dyn Paintable {
+    if rand::random::<u8>() % 2 == 1 {
+        return &House {};
+    } else {
+        return &Car {};
+    }
+}
+
+fn ref_to_paintable2(item: &Box<dyn Paintable>) -> &dyn Paintable {
+    if rand::random::<u8>() % 2 == 1 {
+        return &House {};
+    } else {
+        return &Car {};
+    }
 }
 
 
@@ -70,3 +105,13 @@ fn get_green_object(vehicle: bool) -> Box<dyn Paintable> {
 
     return o;
 }
+
+fn create_paintable_house() -> impl Paintable {
+    return House {};
+}
+
+
+// fn create_paintable_house3<T: Paintable>() -> T { // to nie zadziała
+//     return House {};
+// }
+

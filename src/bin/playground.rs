@@ -1,49 +1,43 @@
-// Make the code compile. Large should be the default size.
+// Fix the print_details method. You can only modify the method body.
 
-/*
-   Default trait is provided by standard library.
-   Has one associated function: default() -> Self
-*/
+use std::cell::RefCell;
+use rand::distributions::uniform::SampleBorrow;
 
-trait Bounded: Default {
-    fn get_max() -> Self;
-    fn get_min() -> Self;
+struct Student {
+    name: String,
+    marks: u8,
+    grade: RefCell<char>,
 }
 
-#[derive(Default)]
-enum Size {
-    Small,
-    #[default]
-    Medium,
-    Large,
-}
+impl Student {
 
-impl Bounded for Size {
-    fn get_max() -> Self {
-        Self::Large
+    fn new(name: &str, marks: u8) -> Self {
+        Student {
+            name: name.to_owned(),
+            marks,
+            grade: RefCell::new('X'),
+        }
     }
-    fn get_min() -> Self {
-        Self::Small
-    }
-}
 
-fn get_size_num(size: &Size) -> u8 {
-    match size {
-        Size::Small => 0,
-        Size::Medium => 1,
-        Size::Large => 2,
+    fn print_details(&self) {
+        let grade = match self.marks {
+            0..=33 => 'C',
+            34..=60 => 'B',
+            _ => 'A',
+        };
+        *self.grade.borrow_mut() = grade;
+        println!(
+            "name: {}, marks: {}, grade: {}",
+            self.name,
+            self.marks,
+            self.grade.borrow()
+        );
     }
 }
 
 fn main() {
-    let my_size = Size::Large;
-    let min_size_num = get_size_num(&Size::get_min());
-    let default_size_num = get_size_num(&Size::default());
-    let my_size_num = get_size_num(&my_size);
-    if my_size_num == min_size_num {
-        println!("I have the shortest size!");
-    }
-    if my_size_num == default_size_num {
-        println!("Default size suits me!")
-    }
+   let x = Box::new(5);
+
+    let student = Student::new("Harry", 70);
+    student.print_details();
 }

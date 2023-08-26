@@ -1,16 +1,36 @@
+use std::cell::RefCell;
 use std::rc::Rc;
 
-fn main() {
-    let v = 34;
-    let r1 = Rc::new(v);
-
-    // TODO: whats the difference between new and from?
-    let r2 = Rc::from(v); // this does the same, dunno
-
-    let r3 = r1.clone(); // this will work, because r1 is cloned
-    let r4 = Rc::clone(&r1); // this will work, because r1 is cloned
-
-    println!("r1 = {}", r1);
-    println!("r3 = {}", r3);
-    println!("r4 = {}", r4);
+struct Database {
+    value: RefCell<i32>, // RefCell is a container that allows mutable borrows checked at runtime
 }
+
+struct AuthService {
+    db: Rc<Database>,
+}
+
+struct FileService {
+    db: Rc<Database>,
+}
+
+fn main() {
+    let db = Rc::new(Database { value: RefCell::new(213) });
+    let auth = AuthService {
+        db: Rc::clone(&db),
+    };
+
+    let file = FileService {
+        db: Rc::clone(&db),
+    };
+
+    let db = Rc::new(Database { value: RefCell::new(213) });
+
+    let mut r1 = db.value.borrow_mut();
+    let mut r2 = db.value.borrow_mut();
+
+    *r1 = 45;
+    *r2 = 4325; // this doesn't throw error on compile time, but it panics on runtime
+
+    println!("auth = {:?}", auth.db.value.borrow());
+}
+
