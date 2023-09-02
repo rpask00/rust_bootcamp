@@ -93,6 +93,8 @@ fn main() {
     let num = 6;
     let fact = factorial(num, decrement, multiply);
     println!("{num}! = {fact}");
+
+
 }
 
 
@@ -128,4 +130,9 @@ fn compute_mut(x: i32, mut computer: impl FnMut(i32) -> i32) -> i32 {
 
 fn get_adder(x: i32) -> impl Fn(i32) -> i32 {
     move |y| x + 6
+}
+
+
+fn call_callback(callback: impl Fn() -> ()){
+    callback();
 }
