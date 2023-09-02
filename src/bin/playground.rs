@@ -1,132 +1,94 @@
-// Complete the code and make the tests pass by implementing std::error::Error for CalculationError
-use std::error::Error;
-use std::fmt::{Display,Formatter};
+// 1. Complete the divide function to get the first four tests to pass.
+// 2. Get the remaining tests to pass by completing the result_with_list and
+//    list_of_results functions.
 
-#[derive(Debug)]
-pub enum CalculationError {
-    InvalidOperation(String),
-    InvalidOperand(String),
-    DivideByZero { dividend: i8 },
-    Overflow,
+#[derive(Debug, PartialEq, Eq)]
+pub enum DivisionError {
+    NotDivisible(NotDivisibleError),
+    DivideByZero,
 }
 
-impl Display for CalculationError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            CalculationError::InvalidOperation(op) => write!(f, "{}", op),
-            CalculationError::InvalidOperand(op) => write!(f, "{}", op),
-            CalculationError::DivideByZero { dividend } => write!(f, "Can not divide by zero. Attempting to divide {} by 0", dividend),
-            CalculationError::Overflow => write!(f, "Overflow while performing the operation"),
-        }
-    }
+#[derive(Debug, PartialEq, Eq)]
+pub struct NotDivisibleError {
+    dividend: i32,
+    divisor: i32,
 }
 
-impl Error for CalculationError{
-    fn source(&self) -> Option<&(dyn Error + 'static)> {
-        todo!()
+// Calculate `a` divided by `b` if `a` is evenly divisible by `b`.
+// Otherwise, return a suitable error.
+pub fn divide(a: i32, b: i32) -> Result<i32, DivisionError> {
+
+    if b == 0 {
+        return Err(DivisionError::DivideByZero)
     }
+    let rest = a%b;
+
+    if rest == 0 {
+        return Ok(a/b);
+    }
+
+    return Err(DivisionError::NotDivisible(NotDivisibleError{
+        dividend: a,
+        divisor: b
+    }))
 }
 
-pub fn calculate(num1: &str, num2: &str, operation: char) -> Result<i8, CalculationError> {
-    let num1 = num1
-        .parse::<i8>()
-        .map_err(|_| CalculationError::InvalidOperand(format!("{} is not a valid integer in range [-128, 127]", num1) ))?;
-    let num2 = num2
-        .parse::<i8>()
-        .map_err(|_| CalculationError::InvalidOperand(format!("{} is not a valid integer in range [-128, 127]", num2)))?;
-    match operation {
-        '+' => num1.checked_add(num2).ok_or(CalculationError::Overflow),
-        '-' => num1.checked_sub(num2).ok_or(CalculationError::Overflow),
-        '*' => num1.checked_mul(num2).ok_or(CalculationError::Overflow),
-        '/' => {
-            if num2 == 0 {
-                return Err(CalculationError::DivideByZero { dividend: num1 });
-            }
-            num1.checked_div(num2).ok_or(CalculationError::Overflow)
-        }
-        _ => Err(CalculationError::InvalidOperation(format!("{} is not a valid operation. Allowed: +,-,/,*", operation))),
-    }
+// Complete the function and return a value of the correct type so the test passes.
+// Desired output: Ok([1, 11, 1426, 3])
+fn result_with_list() -> Result<Vec<i32>, DivisionError>  {
+    let numbers = vec![27, 297, 38502, 81];
+    let division_results: Vec<i32> = numbers.into_iter().filter_map(|n| divide(n, 27).ok()).collect();
+    Ok(division_results)
+}
+
+// Complete the function and return a value of the correct type so the test passes.
+// Desired output: [Ok(1), Ok(11), Ok(1426), Ok(3)]
+fn list_of_results() -> Vec<Result<i32, DivisionError>> {
+    let numbers = vec![27, 297, 38502, 81];
+    let division_results = numbers.into_iter().map(|n| divide(n, 27)).collect();
+    division_results
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    struct Error {
-        e: Box<dyn std::error::Error>,
-    }
-    impl Error {
-        // presence of this method ensures that std::error::Error is satisfied for CalculationError
-        fn new(err: CalculationError) -> Self {
-            Self { e: Box::new(err) }
-        }
+    #[test]
+    fn test_success() {
+        assert_eq!(divide(81, 9), Ok(9));
     }
 
     #[test]
-    fn invalid_operation() {
-        let res1 = calculate("12", "20", '$');
-        let res2 = calculate("45", "43", '^');
-        match (res1, res2) {
-            (Err(e1), Err(e2)) => {
-                assert_eq!(
-                    "$ is not a valid operation. Allowed: +,-,/,*",
-                    format!("{}", e1)
-                );
-                assert_eq!(
-                    "^ is not a valid operation. Allowed: +,-,/,*",
-                    format!("{}", e2)
-                );
-            }
-            _ => panic!("Error expected!"),
-        }
+    fn test_not_divisible() {
+        assert_eq!(
+            divide(81, 6),
+            Err(DivisionError::NotDivisible(NotDivisibleError {
+                dividend: 81,
+                divisor: 6
+            }))
+        );
     }
 
     #[test]
-    fn invalid_operand() {
-        let res1 = calculate("ab", "3r", '+');
-        let res2 = calculate("45", "4.23", '^');
-        match (res1, res2) {
-            (Err(e1), Err(e2)) => {
-                assert_eq!(
-                    "ab is not a valid integer in range [-128, 127]",
-                    format!("{}", e1)
-                );
-                assert_eq!(
-                    "4.23 is not a valid integer in range [-128, 127]",
-                    format!("{}", e2)
-                );
-            }
-            _ => panic!("Error expected!"),
-        }
+    fn test_divide_by_0() {
+        assert_eq!(divide(81, 0), Err(DivisionError::DivideByZero));
     }
 
     #[test]
-    fn divide_by_zero() {
-        let res1 = calculate("45", "0", '/');
-        let res2 = calculate("70", "0", '/');
-        match (res1, res2) {
-            (Err(e1), Err(e2)) => {
-                assert_eq!(
-                    "Can not divide by zero. Attempting to divide 45 by 0",
-                    format!("{}", e1)
-                );
-                assert_eq!(
-                    "Can not divide by zero. Attempting to divide 70 by 0",
-                    format!("{}", e2)
-                );
-            }
-            _ => panic!("Error expected!"),
-        }
+    fn test_divide_0_by_something() {
+        assert_eq!(divide(0, 81), Ok(0));
     }
 
     #[test]
-    fn overflow() {
-        let res = calculate("120", "120", '+');
-        match res {
-            Err(e) => {
-                assert_eq!("Overflow while performing the operation", format!("{}", e));
-            }
-            _ => panic!("Error expected!"),
-        }
+    fn test_result_with_list() {
+        assert_eq!(format!("{:?}", result_with_list()), "Ok([1, 11, 1426, 3])");
+    }
+
+    #[test]
+    fn test_list_of_results() {
+        assert_eq!(
+            format!("{:?}", list_of_results()),
+            "[Ok(1), Ok(11), Ok(1426), Ok(3)]"
+        );
     }
 }
