@@ -15,4 +15,9 @@ fn main() {
 
     println!("First byte of cats {}", b0);
     println!("First char of cats {}", c0);
+
+
+    // Raw strings allow you to write strings without escaping special characters
+    let r1 = r#"He said "Goodbye" and left"#;
+    println!("{}", r1);
 }
