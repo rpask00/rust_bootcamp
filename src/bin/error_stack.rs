@@ -2,9 +2,9 @@
 
 
 use std::{collections::HashMap, io, fmt, error::Error};
-use error_stack::{IntoReport, Report, Result, ResultExt};
 use std::fmt::{Display, Formatter};
 use std::num::ParseIntError;
+use error_stack::{Report, ResultExt, Result};
 
 
 #[derive(Debug)]
@@ -22,8 +22,7 @@ fn parse_card_numbers(card: &str) -> Result<Vec<u32>, ParsePaymentInfoError> {
     let numbers = card
         .split(" ")
         .map(|s| {
-            s.parse()
-                .report()
+            s.parse::<u32>()
                 .attach_printable_lazy(|| {
                     format!("{s:?} could not be parsed as u32")
                 })
