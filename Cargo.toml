@@ -16,3 +16,5 @@ env_logger = "0.9"
 thiserror = "1.0"
 anyhow = "1.0"
 error-stack = "0.4.1"
+tokio = {version = "1.32.0", features = ["full"]}
+tokio-stream = "0.1.14"
