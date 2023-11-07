@@ -3,6 +3,9 @@ struct Dog {
     age: i32,
 }
 
+static mut M_LICZBA: i32 = 0;
+static LICZBA: i32 = 0;
+
 fn main() {
     let x = 124;
     let p_x = &x;
@@ -44,6 +47,9 @@ fn main() {
         println!("{:?}", *raw_c);
     }
 
+
+    // ------- UNSAFE FUNCTIONS
+
     let mut s = String::from("asdf");
     // funkcje które używają unsafe wewnątrz siebie mogą być wywołane bezpośrednio
     safe_fun(&mut s);
@@ -51,6 +57,15 @@ fn main() {
     // unsafe func mogą być tylko wywołane w unsafe scope
     unsafe {
         unsafe_fun(&mut s);
+    }
+
+    // ------- STATIC VARIABLES
+
+    println!("{}", LICZBA);
+    // static mutable variables są traktowane jak zwykły mutowalny raw pointer (*mut)
+    // dlatego dereferencja ich jest unsafe
+    unsafe {
+        println!("{}", M_LICZBA);
     }
 }
 
@@ -65,7 +80,7 @@ fn safe_fun(s: &mut String) {
 
 
 // oznaczenie funkcji jako unsafe oznacza że może ona być wywołana tylko w bloku unsafe
-// dodatkowo cały scope funkcji jest traktowany jako unsafe
+// dodatkowo cały scope funkcji jest traktowany jako unsafe block, ale prawdopodobnie zostanie to zmienione w przyszłości
 unsafe fn unsafe_fun(s: &mut String) {
     let mraw_s = s as *mut String;
     (*mraw_s).push_str("h");

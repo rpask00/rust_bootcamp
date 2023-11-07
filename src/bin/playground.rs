@@ -1,5 +1,14 @@
-fn main() {
-    let r1 = r#"He said "Goodbye" and left"#;
+use tokio_stream::StreamExt;
 
-    println!("{}", r1);
+#[tokio::main(flavor = "current_thread")]
+async fn main() {
+    let mut stream = tokio_stream::iter([
+        async { 1 },
+    ]);
+
+
+    while let Some(x) = stream.next().await {
+        println!("{}", x.await);
+    }
 }
+
