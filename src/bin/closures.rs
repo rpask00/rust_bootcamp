@@ -84,7 +84,7 @@ fn main() {
 
     let _ = compute(6, double);          // Fn can be passed as Fn
     let _ = compute_mut(6, double);      // Fn can be passed as FnMut
-    // let _ = compute(6, multiply_x);               // FnMut cannot be passed as Fn
+    // let _ = compute(6, multiply_x);      // FnMut cannot be passed as Fn
     let _ = compute_mut(6, multiply_x);  // FnMut can be passed to FnMut
     println!("{x}");
 
@@ -93,8 +93,6 @@ fn main() {
     let num = 6;
     let fact = factorial(num, decrement, multiply);
     println!("{num}! = {fact}");
-
-
 }
 
 
@@ -133,6 +131,6 @@ fn get_adder(x: i32) -> impl Fn(i32) -> i32 {
 }
 
 
-fn call_callback(callback: impl Fn() -> ()){
+fn call_callback(callback: impl Fn() -> ()) {
     callback();
 }
