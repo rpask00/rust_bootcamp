@@ -15,8 +15,8 @@ fn main() {
     println!("p_x points to {:?}", p_x); // "0x7fff85c5b214"
     // ale różnica pojawia się w przypadku innych obiektów np.
     let s = String::from("ADSF");
-    println!("Raw pointer holds address: {:?}", &s); // to wypisze to na co wskazuje referencja do s "ASDF"
-    println!("Raw pointer holds address: {:p}", &s); // a to wypisze faktyczny adres pod jakim s się znajduje. "0x7fff85c5b214"
+    println!("Raw pointer holds address: {:?}", &s); // to wypisze to, na co wskazuje referencja do s "ASDF"
+    println!("Raw pointer holds address: {:p}", &s); // a to wypisze faktyczny adres, pod jakim s się znajduje. "0x7fff85c5b214"
 
     let raw_x = &x as *const i32;
     // Wypisanie samego adresu nie jest unsafe same w sobie
@@ -51,7 +51,7 @@ fn main() {
     // ------- UNSAFE FUNCTIONS
 
     let mut s = String::from("asdf");
-    // funkcje które używają unsafe wewnątrz siebie mogą być wywołane bezpośrednio
+    // funkcje, które używają unsafe wewnątrz siebie mogą być wywołane bezpośrednio
     safe_fun(&mut s);
 
     // unsafe func mogą być tylko wywołane w unsafe scope
@@ -79,7 +79,7 @@ fn safe_fun(s: &mut String) {
 }
 
 
-// oznaczenie funkcji jako unsafe oznacza że może ona być wywołana tylko w bloku unsafe
+// oznaczenie funkcji jako unsafe oznacza, że może ona być wywołana, tylko w bloku unsafe
 // dodatkowo cały scope funkcji jest traktowany jako unsafe block, ale prawdopodobnie zostanie to zmienione w przyszłości
 unsafe fn unsafe_fun(s: &mut String) {
     let mraw_s = s as *mut String;
